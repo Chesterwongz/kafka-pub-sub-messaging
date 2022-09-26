@@ -1,0 +1,47 @@
+# Configs referred from https://github.com/confluentinc/cp-docker-images/blob/4.0.x/examples/kafka-single-node/docker-compose.yml
+version: "3.8"
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka-1:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-1
+    depends_on:
+      - zookeeper
+    ports:
+      - 19092:19092
+    environment:
+      # unique server id for all kafka services
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:19092
+
+  kafka-2:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-2
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:29092
+
+  kafka-3:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-3
+    depends_on:
+      - zookeeper
+    ports:
+      - 39092:39092
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:39092
